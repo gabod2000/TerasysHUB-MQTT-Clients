@@ -59,7 +59,7 @@ $ cd TerasysHUB-MQTT-Clients/examples/temperature_humudity/esp8266_arduino/teras
 * Follow these steps to subscribe to your topics via user Web application :
 [User App Guide](https://github.com/gabod2000/Terasys-MQTT/tree/master/user)
 * Once you subscribed correctly to your topics, you will start to receive MQTT messages like below :
-![Alt text](img/userapp.png?raw=true "User App Subscribed Topics")
+![Alt text](../img/userapp.png?raw=true "User App Subscribed Topics")
 * Notice that sample topics are given below which start with user name:
 ```
 terasys@terasys.com/temperature
