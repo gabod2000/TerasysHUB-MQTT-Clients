@@ -3,6 +3,8 @@ wifi.setmode(wifi.STATION)
 wifi.sta.config(STATION_CFG)
 wifi.sta.connect()
 
+local mqtt_connected = 0
+
 local ipTimer = tmr.create()
 ipTimer:alarm(1000, 1, function() 
   checkNetwork()  
@@ -33,6 +35,7 @@ end)
 
 mqtt:connect(MQTT_HOST, MQTT_PORT, 0, function(conn)
   print("connected")
+  mqtt_connected = 1
 end)
 
 local sensorTimer = tmr.create()
@@ -50,12 +53,14 @@ function sensorRead()
       math.floor(humi),
       humi_dec
     ))
-    mqtt:publish(MQTT_TEMPERATURE_TOPIC, temp_dec, 0, 0, function(conn)
-      print("sent temp")
-    end)
-    mqtt:publish(MQTT_HUMIDITY_TOPIC, humi_dec, 0, 0, function(conn)
-      print("sent humidity")
-    end)
+    if mqtt_connected == 1 then
+      mqtt:publish(MQTT_TEMPERATURE_TOPIC, math.floor(temp), 0, 0, function(conn)
+        print("sent temp")
+      end)
+      mqtt:publish(MQTT_HUMIDITY_TOPIC, math.floor(humi), 0, 0, function(conn)
+        print("sent humidity")
+      end)
+    end
   elseif status == dht.ERROR_CHECKSUM then
     print( "DHT Checksum error." )
   elseif status == dht.ERROR_TIMEOUT then
