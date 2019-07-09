@@ -1,0 +1,70 @@
+## Temperature and Humidity Example with ESP8266 Arduino via TeraSysHub MQTT
+Below steps will guide you to run ESP8266 based TeraSysHub MQTT example via Arduino IDE. The temperature and humidity sensor will be [DHT11](https://www.adafruit.com/product/386).
+
+### Wiring the HW
+* DHT11 is a One Wire protocol based sensor so you need to provide 3.3V, Ground and Data pins. 
+* Our Data pin is ESP8266's **GPIO 5**. Notice that it is equivalent to **D1** in NodeMCU fashion. Check **Hardware.cpp** file for details.
+* You need to construct your ESP8266 and DHT wiring as given diagram below :
+![Alt text](../img/sensorwiring.png?raw=true "ESP8266-DHT11 Wiring")
+
+### Arduino IDE Setup
+* Install the Arduino IDE 1.6.4 or greater from this [site](https://www.arduino.cc/en/Main/Software)
+* To Install the ESP8266 Board Package, go to **File->Preferences** from IDE menu.
+* Add below URL into **Additional Boards Manager URLs** section.
+```
+http://arduino.esp8266.com/stable/package_esp8266com_index.json
+```
+* Go to Boards Manager from **Tools->Board->Boards Manager** and search for **esp8266** and press install.
+* After installation, you will be able to select ESP8266 based devices as a board under **Tools->Board**.
+* Select "NodeMCU 1.0" as board. It will auto complete board specifications; 80 MHz as CPU Frequency, 4M (1M SPIFFS) as Flash Size.
+* To be able to write SW on device and get traces, select a proper device path from **Tools->Port** section.
+* For linux users, add your user to the group of dialout to enable serial comm :
+```
+$ sudo adduser $USER dialout
+```
+
+### Required Arduino Libraries
+* To install required libraries, navigate to **Sketch->Include Library->Manage Libraries->Library Manager** and install below libraries one by one by typing :
+```
+1. PubSubClient (by Nick O'Leary)
+2. DHT Sensor Library (by Adafruit)
+```
+
+### Running the MQTT sample
+* Now you are ready to get the sample code. First, clone the TeraSysHUB client repository via git or just download as [zip](https://github.com/gabod2000/TerasysHUB-MQTT-Clients) :
+```
+$ git clone https://github.com/gabod2000/TerasysHUB-MQTT-Clients.git
+```
+* Now, switch to ESP8266 Arduino releated directory to check files are there:
+```
+$ cd TerasysHUB-MQTT-Clients/examples/temperature_humudity/esp8266_arduino/terasys
+```
+* Import **terasys.ino** file into the **Arduino IDE** via **File->Open** to get all other required files.
+* Open **Credentials.h** file to update the given credentials with yours, like below:
+```
+/* WiFi Credentials*/
+#define STA_SSID "YOUR_WIFI_SSID"
+#define STA_PASS "YOUR_WIFI_PASS"
+
+/* MQTT Credentials */
+#define MQTT_USERNAME           "YOUR_MQTT_USERNAME"
+#define MQTT_KEY                "YOUR_MQTT_PASS"
+#define MQTT_TEMPERATURE_TOPIC  "YOUR_MQTT_TEMPERATURE_TOPIC"
+#define MQTT_HUMIDITY_TOPIC     "YOUR_MQTT_HUMIDITY_TOPIC"
+```
+* After credentials update, compile the code and burn into your device. 
+* After you have successfully connect to your WiFi Network, MQTT connection will be provided.
+
+### Receive Data on User App
+* Follow these steps to subscribe to your topics via user Web application :
+[User App Guide](https://github.com/gabod2000/Terasys-MQTT/tree/master/user)
+* Once you subscribed correctly to your topics, you will start to receive MQTT messages like below :
+![Alt text](img/userapp.png?raw=true "User App Subscribed Topics")
+* Notice that sample topics are given below which start with user name:
+```
+terasys@terasys.com/temperature
+terasys@terasys.com/humidity
+```
+
+
+
