@@ -28,6 +28,7 @@ $ sudo adduser $USER dialout
 ```
 1. PubSubClient (by Nick O'Leary)
 2. DHT Sensor Library (by Adafruit)
+3. Adafruit Unified Sensor (by Adafruit)
 ```
 
 ### Running the MQTT sample
